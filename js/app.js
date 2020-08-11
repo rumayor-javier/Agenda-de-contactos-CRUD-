@@ -7,6 +7,9 @@ function eventListeners() {
     //Cuando el formulario crear o editar se ejecuta
     formularioContactos.addEventListener('submit', leerFormulario);
 
+    //Listener para eliminar el contacto
+    listadoContactos.addEventListener('click', eliminarContacto);
+
 }
 
 function leerFormulario(e) {
@@ -84,7 +87,7 @@ function insertarBD(datos) {
 
             //crear icono eliminar
             const iconoEliminar = document.createElement('i');
-            iconoEditar.classList.add('fas', 'fa-trash-alt');
+            iconoEliminar.classList.add('fas', 'fa-trash-alt');
 
             //crear boton de eliminar
             const btnEliminar = document.createElement('button');
@@ -100,6 +103,12 @@ function insertarBD(datos) {
 
             //agregarlo con los contactos
             listadoContactos.appendChild(nuevoContacto);
+
+            //resetar el form
+            document.querySelector('form').reset();
+
+            //mostrar la notificacion de correcto
+            mostrarNotificacion('Nuevo contacto añadido', 'correcto');
 
         }
     }
