@@ -8,7 +8,9 @@ function eventListeners() {
     formularioContactos.addEventListener('submit', leerFormulario);
 
     //Listener para eliminar el contacto
-    listadoContactos.addEventListener('click', eliminarContacto);
+    if (listadoContactos) {
+        listadoContactos.addEventListener('click', eliminarContacto);
+    }
 
 }
 
@@ -37,6 +39,11 @@ function leerFormulario(e) {
             insertarBD(infoContacto);
         } else {
             //editar el contacto
+            //leer el id
+            const idRegistro = document.querySelector('#id').value;
+            infoContacto.append('id', idRegistro);
+            actualizarRegistro(infoContacto);
+
         }
     }
 }
@@ -115,6 +122,37 @@ function insertarBD(datos) {
 
     // 4. Enviar los datos
     xhr.send(datos)
+}
+
+function actualizarRegistro(datos) {
+    //llamado a AJAX
+    // 1. crear objeto
+    const xhr = new XMLHttpRequest();
+
+    // 2. abrir la conexion
+    xhr.open('POST', 'includes/modelos/modelo-contacto.php', true);
+
+    // 3. leer la respuesta
+    xhr.onload = function() {
+            if (this.status === 200) {
+                const respuesta = JSON.parse(xhr.responseText);
+
+                if (respuesta.respuesta === 'correcto') {
+                    //mostrar notificacion
+                    mostrarNotificacion('Contacto editado', 'correcto')
+                } else {
+                    //hubo un error
+                    mostrarNotificacion('No se realizarón cambios', 'error');
+                }
+                //Despues de 4 seg redireccionar
+                setTimeout(() => {
+                    window.location.href = 'index.php';
+                }, 4000);
+            }
+        }
+        // 4. enviar la peticion
+    xhr.send(datos);
+
 }
 
 //Eliminar el contacto
