@@ -117,6 +117,45 @@ function insertarBD(datos) {
     xhr.send(datos)
 }
 
+//Eliminar el contacto
+function eliminarContacto(e) {
+    if (e.target.parentElement.classList.contains('btn-borrar')) {
+        //tomar id de elemento a eliminar
+        const id = e.target.parentElement.getAttribute('data-id');
+
+        //preguntar a usuario si esta seguro
+        const respuesta = confirm('Esta apunto de eliminar el contacto desea continuar?');
+        if (respuesta) {
+            //llamado a AJAX
+            // 1. crear objeto
+            const xhr = new XMLHttpRequest();
+
+            // 2. abrir la conexion
+            xhr.open('GET', `includes/modelos/modelo-contacto.php?id=${id}&accion=borrar`, true);
+
+            // 3. leer la respuesta
+            xhr.onload = function() {
+                    if (this.status === 200) {
+                        const resultado = JSON.parse(xhr.responseText);
+
+                        if (resultado.respuesta === 'correcto') {
+                            //Eliminar registro del DOM
+                            e.target.parentElement.parentElement.parentElement.remove();
+
+                            //Mostrar notificacion
+                            mostrarNotificacion('Contacto eliminado', 'correcto');
+                        } else {
+                            //Mostrar una notificacion
+                            mostrarNotificacion('Hubo un error...', 'error');
+                        }
+                    }
+                }
+                // 4. enviar la peticion
+            xhr.send();
+        }
+    }
+}
+
 //Notificacion en pantalla
 function mostrarNotificacion(mensaje, clase) {
     const notificacion = document.createElement('div');
