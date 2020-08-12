@@ -239,6 +239,7 @@ function buscarContactos(e) {
             registro.style.display = 'table-row';
         }
     })
+    numeroContactos();
 }
 
 /** Muestra el número de Contactos */
